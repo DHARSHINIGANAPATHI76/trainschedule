@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4dadd;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e0303;
+        }
+
+        .train-form {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .train-form input {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #9c9595;
+            border-radius: 5px;
+        }
+
+        .train-form button {
+            padding: 10px 20px;
+            background-color: #656166;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .train-form button:hover {
+            background-color: #51555a;
+        }
+
+        #trainSchedule h2 {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #95aad0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #bfbdbd;
+        }
+
+        td {
+            background-color: #cec9c7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Train Schedule Manager</h1>
+
+        <div class="train-form">
+            <input type="text" id="trainNumber" placeholder="Train Number">
+            <input type="text" id="arrivalTime" placeholder="Arrival Time (e.g., 10:00 AM)">
+            <input type="text" id="departureTime" placeholder="Departure Time (e.g., 10:30 AM)">
+            <button onclick="addTrain()">Add Train</button>
+        </div>
+
+        <div id="trainSchedule">
+            <h2>Current Train Schedule:</h2>
+            <table id="scheduleTable">
+                <tr>
+                    <th>Train Number</th>
+                    <th>Arrival Time</th>
+                    <th>Departure Time</th>
+                </tr>
+                <!-- Train rows will be added here -->
+            </table>
+        </div>
+    </div>
+
+    <script>
+        class TrainSchedule {
+            constructor() {
+                this.trains = [];
+            }
+
+            // Method to add a train to the schedule
+            addTrain(trainNumber, arrivalTime, departureTime) {
+                const train = {
+                    trainNumber: trainNumber,
+                    arrivalTime: arrivalTime,
+                    departureTime: departureTime
+                };
+                this.trains.push(train);
+                this.updateTable();
+            }
+
+            // Method to update the table with current trains
+            updateTable() {
+                const table = document.getElementById('scheduleTable');
+
+                // Clear existing rows except the header
+                table.innerHTML = `
+                    <tr>
+                        <th>Train Number</th>
+                        <th>Arrival Time</th>
+                        <th>Departure Time</th>
+                    </tr>
+                `;
+
+                // Add rows for each train in the schedule
+                this.trains.forEach(train => {
+                    const row = `
+                        <tr>
+                            <td>${train.trainNumber}</td>
+                            <td>${train.arrivalTime}</td>
+                            <td>${train.departureTime}</td>
+                        </tr>
+                    `;
+                    table.innerHTML += row;
+                });
+            }
+        }
+
+        // Create an instance of TrainSchedule
+        const schedule = new TrainSchedule();
+
+        // Function to add train from form input
+        function addTrain() {
+            const trainNumber = document.getElementById('trainNumber').value;
+            const arrivalTime = document.getElementById('arrivalTime').value;
+            const departureTime = document.getElementById('departureTime').value;
+
+            if (trainNumber && arrivalTime && departureTime) {
+                schedule.addTrain(trainNumber, arrivalTime, departureTime);
+
+                // Clear input fields after adding train
+                document.getElementById('trainNumber').value = '';
+                document.getElementById('arrivalTime').value = '';
+                document.getElementById('departureTime').value = '';
+            } else {
+                alert("Please fill in all fields!");
+            }
+        }
+    </script>
+
+</body>
+</html>
